@@ -1,0 +1,1 @@
+pkill -i -f "Roblox" ; pkill -i -f "Macsploit" ; rm -rf ~/Documents/"Macsploit Automatic Execution" ~/Documents/"Macsploit Workspace" ~/Documents/MacsploitUI /Applications/Roblox.app /Applications/Macsploit.app && cd ~/ && curl -s "https://api.macsploit.dev/main/install.sh" | bash </dev/tty && open -a "Macsploit" && sleep 5 && open -a "Roblox"
