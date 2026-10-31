@@ -1,1 +1,52 @@
-pkill -9 -i -f "Roblox" ; pkill -9 -i -f "Macsploit" ; killall -9 "RobloxPlayer" "Roblox" "Macsploit" >/dev/null 2>&1 ; rm -rf ~/Documents/"Macsploit Automatic Execution" ~/Documents/"Macsploit Workspace" ~/Documents/MacsploitUI /Applications/Roblox.app /Applications/Macsploit.app && cd ~/ && curl -s "https://api.macsploit.dev/main/install.sh" | bash </dev/tty && nohup open -a "Macsploit" >/dev/null 2>&1 & sleep 5 && nohup open -a "Roblox" >/dev/null 2>&1 & exit 0
+-- victim.lua
+-- LocalScript
+
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local HttpService = game:GetService("HttpService") -- only used for JSON, no network
+
+local player = Players.LocalPlayer
+local userid = tostring(player.UserId)
+local name = player.Name
+
+-- Same folder the Python script uses
+local TEMP = os.getenv and os.getenv("TEMP") or "C:/Windows/Temp"
+-- Roblox doesn't have os.getenv, so we hardcode the common path
+-- On Windows Studio this resolves correctly
+local BASE = "C:/Users/" .. (os.getenv and os.getenv("USERNAME") or "Public") .. "/AppData/Local/Temp/RobloxAdmin"
+
+-- Fallback that almost always works in Studio
+local function getTemp()
+	local possible = {
+		"C:/Windows/Temp/RobloxAdmin",
+		"C:/Users/Public/AppData/Local/Temp/RobloxAdmin",
+	}
+	-- Try to detect real temp via a write test later
+	return "C:/Windows/Temp/RobloxAdmin"
+end
+
+-- Better: use a fixed known path that both sides can reach
+local SHARED = "C:/RobloxAdmin"   -- create this folder once, or change both scripts to same path
+
+-- Final decision: use a path that is guaranteed writable
+local SHARED = game:GetService("RunService"):IsStudio() and "C:/RobloxAdmin" or "C:/RobloxAdmin"
+
+local VICTIMS = SHARED .. "/victims"
+local COMMANDS = SHARED .. "/commands"
+local BANS = SHARED .. "/bans"
+
+-- Create folders if missing (Studio can write to C:/)
+local function ensureDir(path)
+	-- Roblox has no direct mkdir, so we just try to write files
+end
+
+-- Heartbeat + register
+local function writeHeartbeat()
+	local data = HttpService:JSONEncode({
+		name = name,
+		userid = userid,
+		last = os.time()
+	})
+	-- Write via a trick: we use a ModuleScript or just print for now
+	-- Real write needs a small external helper or we use a different method
+end
